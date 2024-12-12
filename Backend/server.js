@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const dbConfig = require('./config/dbConfig');
-const authRoutes = require('./routes/authRoutes');
-const cartRoutes = require('./routes/cartRoutes');
+const db = require('./config/dbConfig'); // Database connection
+const authRoutes = require('./routes/authRoutes'); // Authentication routes
+const cartRoutes = require('./routes/cartRoutes'); // Cart routes
 
 // Initialize Express app
 const app = express();
@@ -13,8 +13,16 @@ app.use(cors());
 app.use(express.json()); // Parse JSON requests
 app.use(cookieParser()); // Parse cookies
 
-// Call the database connection function
-dbConfig(); // Connect to SQLite database
+// Check database connection (for debugging purposes)
+db.serialize(() => {
+  db.get("SELECT 1", (err, row) => {
+    if (err) {
+      console.error('Error with SQLite database connection:', err.message);
+    } else {
+      console.log('SQLite database connection is successful.');
+    }
+  });
+});
 
 // Define routes
 app.use('/api/auth', authRoutes); // Authentication routes

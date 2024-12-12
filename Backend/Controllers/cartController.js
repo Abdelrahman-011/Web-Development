@@ -1,36 +1,40 @@
-const db = require('../config/dbConfig');
+const db = require('../config/dbConfig'); // Import the database connection
 
-// Add item to cart
-exports.addToCart = (req, res) => {
+// Add a package to the cart
+const addToCart = (req, res) => {
   const { userId, packageName, price } = req.body;
 
   if (!userId || !packageName || !price) {
-    return res.status(400).json({ error: 'User ID, package name, and price are required' });
+    return res.status(400).json({ message: 'All fields (userId, packageName, price) are required' });
   }
 
-  const query = `INSERT INTO cart (user_id, package_name, price) VALUES (?, ?, ?)`;
-  db.run(query, [userId, packageName, price], function (err) {
+  const sql = `INSERT INTO cart (userId, packageName, price) VALUES (?, ?, ?)`;
+  db.run(sql, [userId, packageName, price], function(err) {
     if (err) {
-      return res.status(500).json({ error: 'Error adding item to cart' });
+      return res.status(500).json({ message: 'Error adding package to cart', error: err.message });
     }
-
-    res.status(201).json({
-      message: 'Item added to cart successfully',
-      cartId: this.lastID
-    });
+    return res.status(201).json({ message: 'Package added to cart successfully', cartId: this.lastID });
   });
 };
 
-// Get items in the cart for a user
-exports.getCartItems = (req, res) => {
-  const userId = req.params.userId;
+// Get all items in the user's cart
+const getCartItems = (req, res) => {
+  const { userId } = req.params;
 
-  const query = `SELECT * FROM cart WHERE user_id = ?`;
-  db.all(query, [userId], (err, rows) => {
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  const sql = `SELECT * FROM cart WHERE userId = ?`;
+  db.all(sql, [userId], (err, rows) => {
     if (err) {
-      return res.status(500).json({ error: 'Error fetching cart items' });
+      return res.status(500).json({ message: 'Error fetching cart items', error: err.message });
     }
-
-    res.status(200).json({ cartItems: rows });
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'No items found in the cart' });
+    }
+    return res.status(200).json({ message: 'Cart items fetched successfully', cartItems: rows });
   });
 };
+
+module.exports = { addToCart, getCartItems };

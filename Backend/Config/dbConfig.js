@@ -1,16 +1,30 @@
-// backend/config/dbConfig.js
-const mysql = require('mysql2');
+const sqlite3 = require('sqlite3').verbose();
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',  // Your MySQL username
-  password: '',  // Your MySQL password
-  database: 'vroomverse'  // Your database name
+// Initialize SQLite Database
+const db = new sqlite3.Database('./database.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to the SQLite database.');
+  }
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to the MySQL database!');
+// Create tables if they don't exist
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS cart (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    packageName TEXT NOT NULL,
+    price REAL NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id)
+  )`);
 });
 
-module.exports = connection;
+module.exports = db;
