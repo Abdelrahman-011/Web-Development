@@ -1,0 +1,28 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",       // To start the React app
+    "build": "react-scripts build",       // To build the React app
+    "test": "react-scripts test",         // For running tests
+    "lint": "eslint .",                   // Optional: Run ESLint
+    "eject": "react-scripts eject"       // Allows you to eject from react-scripts
+  },
+  "dependencies": {
+    "react": "^17.0.2",                  // React core
+    "react-dom": "^17.0.2",              // React DOM
+    "react-scripts": "5.0.1"             // React scripts for build and start
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"                  // Optional: ESLint for linting the code
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "license": "ISC",
+  "description": ""
+}
