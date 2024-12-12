@@ -1,4 +1,4 @@
-const db = require('../Config/dbConfig'); // Import the database connection
+const db = require('../config/dbConfig'); // Import the database connection
 
 // Add a package to the cart
 const addToCart = (req, res) => {

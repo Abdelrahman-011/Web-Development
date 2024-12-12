@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const db = require('./config/dbConfig'); // Database connection
+const db = require('./Config/dbConfig'); // Database connection
 const authRoutes = require('./routes/authRoutes'); // Authentication routes
 const cartRoutes = require('./routes/cartRoutes'); // Cart routes
 
