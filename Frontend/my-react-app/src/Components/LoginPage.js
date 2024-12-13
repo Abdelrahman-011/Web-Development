@@ -1,25 +1,22 @@
-// src/components/LoginPage.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const history = useHistory();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password,
-      });
-      // If login successful, store token in cookies
-      document.cookie = `token=${response.data.token}; HttpOnly; Secure;`;
-      history.push('/home'); // Redirect to home page
-    } catch (error) {
-      console.error('Login failed:', error);
+
+    // Replace this with actual login logic if needed
+    if (email === 'test@example.com' && password === 'password') {
+      // Store token in localStorage
+      localStorage.setItem('authToken', 'dummyAuthToken'); // Replace with real token if applicable
+      
+      // Redirect to home page
+      window.location.href = '/home'; // Redirect to your home page after successful login
+    } else {
+      console.error('Invalid login credentials');
+      alert('Invalid login credentials. Please try again.');
     }
   };
 
@@ -48,3 +45,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

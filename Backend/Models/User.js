@@ -1,9 +1,36 @@
-// backend/models/User.js
-const mongoose = require('mongoose');
+import { useState } from 'react';
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
+const UserModel = () => {
+  const [users, setUsers] = useState([]);
 
-module.exports = mongoose.model('User', userSchema);
+  const addUser = (email, password) => {
+    const newUser = { id: Date.now(), email, password };
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
+
+  const getUserByEmail = (email) => {
+    return users.find((user) => user.email === email);
+  };
+
+  const updateUserPassword = (email, newPassword) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.email === email ? { ...user, password: newPassword } : user
+      )
+    );
+  };
+
+  const deleteUser = (email) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.email !== email));
+  };
+
+  return {
+    users,
+    addUser,
+    getUserByEmail,
+    updateUserPassword,
+    deleteUser,
+  };
+};
+
+export default UserModel;
